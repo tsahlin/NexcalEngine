@@ -1,3 +1,6 @@
+// Nexcal math engine library
+// MIT License - https://github.com/tsahlin/NexcalEngine
+
 using Xunit;
 
 namespace Nexcal.Engine.Tests

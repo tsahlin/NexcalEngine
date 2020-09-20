@@ -1,4 +1,7 @@
-﻿namespace Nexcal.Engine
+﻿// Nexcal math engine library
+// MIT License - https://github.com/tsahlin/NexcalEngine
+
+namespace Nexcal.Engine
 {
 	public class Position
 	{

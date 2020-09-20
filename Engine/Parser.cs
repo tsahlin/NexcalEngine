@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Nexcal math engine library
+// MIT License - https://github.com/tsahlin/NexcalEngine
+
+using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Nexcal.Engine.Errors;
