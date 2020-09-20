@@ -7,6 +7,10 @@ namespace Nexcal.Engine.Operators
 {
 	public class Add : BinaryOperator
 	{
+		public Add(Position position) : base(position)
+		{
+		}
+
 		public override Precedence Precedence => Precedence.Additive;
 
 		protected override Number Evaluate(Calculator calc, Number left, Number right)

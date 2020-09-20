@@ -7,6 +7,10 @@ namespace Nexcal.Engine.Units
 {
 	public abstract class Unit : Token
 	{
+		public Unit(Position position) : base(position)
+		{
+		}
+
 		public override Number Evaluate(Calculator calc)
 		{
 			// Sätt left token Number.Unit = this

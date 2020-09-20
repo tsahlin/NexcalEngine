@@ -5,5 +5,8 @@ namespace Nexcal.Engine.Units
 {
 	public abstract class LengthUnit : Unit
 	{
+		public LengthUnit(Position position) : base(position)
+		{
+		}
 	}
 }

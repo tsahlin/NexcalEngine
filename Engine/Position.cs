@@ -31,6 +31,11 @@ namespace Nexcal.Engine
 			return Index += chars;
 		}
 
+		public int CalculateLength(Position end)
+		{
+			return Length = end - Index;
+		}
+
 		public int NewLine()
 		{
 			Index++;

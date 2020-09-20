@@ -15,27 +15,31 @@ namespace Nexcal.Engine
 			ExpressionString = expression;
 		}
 
-		public int CharsLeft => Math.Max(ExpressionString.Length - Position, 0);
+		internal int CharsLeft => Math.Max(ExpressionString.Length - Position, 0);
 
-		public char CurrentChar => CharsLeft >= 1 ? ExpressionString[Position] : '\0';
+		internal char CurrentChar => CharsLeft >= 1 ? ExpressionString[Position] : '\0';
 
-		public string ExpressionString { get; set; }
+		internal string ExpressionString { get; set; }
 
-		public char NextChar => CharsLeft >= 2 ? ExpressionString[Position + 1] : '\0';
+		internal char NextChar => CharsLeft >= 2 ? ExpressionString[Position + 1] : '\0';
 
-		public Position Position { get; } = new Position();
+		internal ParseResult Result { get; } = new ParseResult();
 
-		public static Expression Parse(string expression)
+		internal Position Position { get; } = new Position();
+
+		public static ParseResult Parse(string expression)
 		{
 			var parser = new Parser(expression);
 
-			return parser.ParseSubExpression();
+			parser.Result.Expression = parser.ParseSubExpression();
+
+			return parser.Result;
 		}
 
 		private Expression ParseSubExpression(string stop = "")
 		{
 			var stopChars	= new HashSet<char>(stop.ToCharArray());
-			var expression	= new Expression() { Position = Position };
+			var expression	= new Expression(Position);
 
 			while (Position < ExpressionString.Length)
 			{
@@ -56,20 +60,39 @@ namespace Nexcal.Engine
 				Token token = null;
 
 				if (char.IsDigit(chr) || chr == '.')
-					token = Number.Parse(this, Position.Clone);
+					token = Number.Parse(this);
 				else
 				{
 					// Unsupported char
 				}
 
-				token.Position.Length = Position - token.Position;
+				token.Position.CalculateLength(Position);
 
 				expression.Add(token);
 			}
 
-			expression.Position.Length = Position - expression.Position;
+			expression.Position.CalculateLength(Position);
 
 			return expression;
 		}
+
+		public void Warning(Position position, ParseWarning warning)
+		{
+			Result.Warnings.Add(new ParseWarningItem { Position = position.Clone, Warning = warning });
+		}
+	}
+
+	public class ParseResult
+	{
+		public Expression Expression { get; internal set; }
+
+		public List<ParseWarningItem> Warnings { get; } = new List<ParseWarningItem>();
+	}
+
+	public class ParseWarningItem
+	{
+		public Position Position { get; internal set; }
+
+		public ParseWarning Warning { get; internal set; }
 	}
 }

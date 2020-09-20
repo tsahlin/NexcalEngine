@@ -7,6 +7,10 @@ namespace Nexcal.Engine.Units
 {
 	public class Meter : LengthUnit
 	{
+		public Meter(Position position) : base(position)
+		{
+		}
+
 		public override string Format(Number number)
 		{
 			throw new NotImplementedException();

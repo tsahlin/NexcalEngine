@@ -5,6 +5,10 @@ namespace Nexcal.Engine.Operators
 {
 	public abstract class BinaryOperator : Operator
 	{
+		public BinaryOperator(Position position) : base(position)
+		{
+		}
+
 		public override Number Evaluate(Calculator calc)
 		{
 			var result = Evaluate(calc, LeftToken.Evaluate(calc), RightToken.Evaluate(calc));

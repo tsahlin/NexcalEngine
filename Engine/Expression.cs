@@ -7,6 +7,10 @@ namespace Nexcal.Engine
 {
 	public class Expression : Token
 	{
+		public Expression(Position position) : base(position)
+		{
+		}
+
 		public Token FirstToken { get; internal set; }
 
 		public Token LastToken { get; internal set; }

@@ -5,6 +5,11 @@ namespace Nexcal.Engine
 {
 	public abstract class Token
 	{
+		public Token(Position position)
+		{
+			Position = position.Clone;
+		}
+
 		public Token LeftToken { get; internal set; }
 
 		public Position Position { get; internal set; }
