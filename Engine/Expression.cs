@@ -2,6 +2,7 @@
 // MIT License - https://github.com/tsahlin/NexcalEngine
 
 using System;
+using System.Text;
 
 namespace Nexcal.Engine
 {
@@ -11,22 +12,75 @@ namespace Nexcal.Engine
 		{
 		}
 
-		public Token FirstToken { get; internal set; }
+		public Anchor Anchor { get; internal set; }
 
-		public Token LastToken { get; internal set; }
+		public string DebugList
+		{
+			get
+			{
+				var sb = new StringBuilder();
+
+				if (Anchor == null)
+				{
+					sb.Append("<null>");
+
+					return sb.ToString();
+				}
+				else if (Anchor.LeftToken == null)
+				{
+					sb.Append($"<null> <--- {Anchor.Name} ---> ");
+					sb.Append(Anchor.RightToken == null ? "<null>" : Anchor.Name);
+
+					return sb.ToString();
+				}
+
+				sb.AppendLine($"| <--- {Anchor.Name}");
+				sb.AppendLine("|");
+
+				Token token		= Anchor.LeftToken;
+				Token lastToken = Anchor;
+
+				while (token != Anchor)
+				{
+					if (token.LeftToken == lastToken)
+						sb.Append("| <--> ");
+					else
+						sb.Append("| <error> ");
+
+					sb.AppendLine(token.Name);
+
+					lastToken	= token;
+					token		= token.RightToken;
+				}
+
+				sb.AppendLine("|");
+				sb.Append($"| ---> {lastToken.RightToken.Name}");
+
+				return sb.ToString();
+			}
+		}
+
+		public Token FirstToken => Anchor?.LeftToken;
+
+		public Token LastToken => Anchor?.RightToken;
 
 		public void Add(Token token)
 		{
-			if (LastToken == null)
+			if (Anchor == null)
 			{
-				FirstToken	= token;
-				LastToken	= token;
+				Anchor = new Anchor(Position);
+
+				token.LeftToken		= Anchor;
+				Anchor.LeftToken	= token;
 			}
 			else
 			{
+				token.LeftToken			= LastToken;
 				LastToken.RightToken	= token;
-				LastToken				= token;
 			}
+
+			token.RightToken	= Anchor;
+			Anchor.RightToken	= token;
 		}
 
 		public override Number Evaluate(Calculator calc)

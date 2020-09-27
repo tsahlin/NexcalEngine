@@ -23,6 +23,8 @@ namespace Nexcal.Engine
 
 		public NumberBase Base { get; set; } = NumberBase.Dec;
 
+		public override Precedence Precedence => Precedence.Number;
+
 		public Unit Unit { get; set; }
 
 		public double Value { get; set; } = 0;

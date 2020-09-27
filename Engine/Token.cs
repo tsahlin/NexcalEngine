@@ -12,6 +12,8 @@ namespace Nexcal.Engine
 
 		public Token LeftToken { get; internal set; }
 
+		public string Name => GetType().Name;
+
 		public Position Position { get; internal set; }
 
 		public virtual Precedence Precedence => Precedence.None;
