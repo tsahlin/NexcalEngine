@@ -2,6 +2,7 @@
 // MIT License - https://github.com/tsahlin/NexcalEngine
 
 using System.Globalization;
+using Nexcal.Engine.Errors;
 using Xunit;
 
 namespace Nexcal.Engine.Tests
@@ -13,6 +14,26 @@ namespace Nexcal.Engine.Tests
 		{
 			Assert.Equal(",", CultureInfo.InvariantCulture.NumberFormat.NumberGroupSeparator);
 			Assert.Equal(".", CultureInfo.InvariantCulture.NumberFormat.NumberDecimalSeparator);
+		}
+
+		[Theory]
+		[InlineData("0b", ParseExpectation.BinNumber)]
+		[InlineData("0b2", ParseExpectation.BinNumber)]
+		[InlineData("0x", ParseExpectation.HexNumber)]
+		[InlineData("0xg", ParseExpectation.HexNumber)]
+		[InlineData(".a", ParseExpectation.Number)]
+		[InlineData("a", ParseExpectation.Number)]
+		public void ExParseExpectation(string str, ParseExpectation expectation)
+		{
+			try
+			{
+				var parser = new Parser(str);
+				var number = Number.Parse(parser);
+			}
+			catch (ParseException e)
+			{
+				Assert.Equal(expectation, e.Expectation);
+			}
 		}
 
 		[Theory]

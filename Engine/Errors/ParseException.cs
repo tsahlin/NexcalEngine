@@ -36,6 +36,7 @@ namespace Nexcal.Engine.Errors
 		None,
 		BinNumber,
 		HexNumber,
-		Number
+		Number,
+		Operator
 	}
 }

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Nexcal.Engine.Errors;
+using Nexcal.Engine.Operators;
 
 namespace Nexcal.Engine
 {
@@ -61,9 +62,11 @@ namespace Nexcal.Engine
 
 				if (char.IsDigit(chr) || chr == '.')
 					token = Number.Parse(this);
+				else if (Operator.Chars.Contains(chr))
+					token = Operator.Parse(this);
 				else
 				{
-					// Unsupported char
+					// TODO: Unsupported char
 				}
 
 				token.Position.CalculateLength(Position);
