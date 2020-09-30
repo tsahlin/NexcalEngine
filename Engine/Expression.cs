@@ -2,6 +2,7 @@
 // MIT License - https://github.com/tsahlin/NexcalEngine
 
 using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace Nexcal.Engine
@@ -64,6 +65,22 @@ namespace Nexcal.Engine
 
 		public Token LastToken => Anchor?.RightToken;
 
+		public string TokenNames
+		{
+			get
+			{
+				var sb = new StringBuilder();
+
+				for (Token t = FirstToken; t != Anchor; t = t.RightToken)
+					sb.Append(t.Name).Append(",");
+
+				if (sb.Length > 0)
+					sb.Length--;
+
+				return sb.ToString();
+			}
+		}
+
 		public void Add(Token token)
 		{
 			if (Anchor == null)
@@ -86,6 +103,28 @@ namespace Nexcal.Engine
 		public override Number Evaluate(Calculator calc)
 		{
 			throw new NotImplementedException();
+		}
+
+		public List<Token> GetList()
+		{
+			var list = new List<Token>();
+
+			for (Token t = FirstToken; t != Anchor; t = t.RightToken)
+			{
+				list.Add(t);
+			}
+
+			return list;
+		}
+
+		public override string ToString()
+		{
+			var sb = new StringBuilder();
+
+			for (Token t = FirstToken; t != Anchor; t = t.RightToken)
+				sb.Append(t.ToString());
+
+			return sb.ToString();
 		}
 	}
 
