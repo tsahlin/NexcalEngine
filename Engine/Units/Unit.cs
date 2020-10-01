@@ -2,6 +2,7 @@
 // MIT License - https://github.com/tsahlin/NexcalEngine
 
 using System;
+using System.Collections.Generic;
 
 namespace Nexcal.Engine.Units
 {
@@ -20,5 +21,10 @@ namespace Nexcal.Engine.Units
 		}
 
 		public abstract string Format(Number number);
+
+		internal static void InitIdentifierMap(Dictionary<string, Type> map)
+		{
+			map["m"]	= typeof(Meter);
+		}
 	}
 }

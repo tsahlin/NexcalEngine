@@ -9,6 +9,8 @@ namespace Nexcal.Engine.Tests
 	{
 		[Theory]
 		[InlineData("1+2-3", "Number,Add,Number,Subtract,Number", "1 + 2 - 3")]
+		[InlineData("10m", "Number,Meter", "10m")]
+		[InlineData("5 mod 3", "Number,Modulo,Number", "5 mod 3")]
 		public void Parse(string expr, string names, string toStr)
 		{
 			var result = Parser.Parse(expr);

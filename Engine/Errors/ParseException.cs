@@ -28,7 +28,8 @@ namespace Nexcal.Engine.Errors
 	{
 		InvalidNumber,
 		NumberTooBig,
-		Syntax
+		Syntax,
+		UnknownIdentifier
 	}
 
 	public enum ParseExpectation
@@ -36,6 +37,7 @@ namespace Nexcal.Engine.Errors
 		None,
 		BinNumber,
 		HexNumber,
+		Identifier,
 		Number,
 		Operator
 	}

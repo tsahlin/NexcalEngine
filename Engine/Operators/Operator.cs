@@ -17,6 +17,11 @@ namespace Nexcal.Engine.Operators
 
 		public static HashSet<char> Chars { get; private set; } = new HashSet<char>(chars.ToCharArray());
 
+		internal static void InitIdentifierMap(Dictionary<string, Type> map)
+		{
+			map["mod"]	= typeof(Modulo);
+		}
+
 		public static Operator Parse(Parser p)
 		{
 			Operator op;
