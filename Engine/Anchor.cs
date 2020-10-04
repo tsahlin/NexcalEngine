@@ -9,7 +9,7 @@ namespace Nexcal.Engine
 		{
 		}
 
-		public override Number Evaluate(Calculator calc)
+		internal override Number Evaluate(Calculator calc)
 		{
 			return (Number)LeftToken;
 		}

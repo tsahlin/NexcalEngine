@@ -15,7 +15,7 @@ namespace Nexcal.Engine.Functions
 
 		public override Precedence Precedence => Precedence.Primary;
 
-		public override Number Evaluate(Calculator calc)
+		internal override Number Evaluate(Calculator calc)
 		{
 			throw new NotImplementedException();
 		}

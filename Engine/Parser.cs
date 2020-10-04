@@ -14,16 +14,18 @@ namespace Nexcal.Engine
 	{
 		private static Dictionary<string, Type> identifierMap;
 
-		internal Parser(string expression)
+		internal Parser(Calculator calc)
 		{
-			ExpressionString = expression;
+			Calculator = calc;
 		}
+
+		private Calculator Calculator { get; }
 
 		internal int CharsLeft => Math.Max(ExpressionString.Length - Position, 0);
 
 		internal char CurrentChar => CharsLeft >= 1 ? ExpressionString[Position] : '\0';
 
-		internal string ExpressionString { get; set; }
+		internal string ExpressionString { get; private set; }
 
 		private static Dictionary<string, Type> IdentifierMap
 		{
@@ -43,17 +45,14 @@ namespace Nexcal.Engine
 
 		internal char NextChar => CharsLeft >= 2 ? ExpressionString[Position + 1] : '\0';
 
-		internal ParseResult Result { get; } = new ParseResult();
+		internal Position Position { get; private set; }
 
-		internal Position Position { get; } = new Position();
-
-		public static ParseResult Parse(string expression)
+		public Expression Parse(string expression)
 		{
-			var parser = new Parser(expression);
+			ExpressionString	= expression;
+			Position			= new Position();
 
-			parser.Result.Expression = parser.ParseSubExpression();
-
-			return parser.Result;
+			return ParseSubExpression();
 		}
 
 		private Token ParseIdentifier()
@@ -121,23 +120,14 @@ namespace Nexcal.Engine
 			return expression;
 		}
 
-		public void Warning(Position position, ParseWarning warning)
+		internal void Warning(Position position, WarningCode warning)
 		{
-			Result.Warnings.Add(new ParseWarningItem { Position = position.Clone, Warning = warning });
+			Calculator?.Warning(position, warning);
 		}
-	}
 
-	public class ParseResult
-	{
-		public Expression Expression { get; internal set; }
-
-		public List<ParseWarningItem> Warnings { get; } = new List<ParseWarningItem>();
-	}
-
-	public class ParseWarningItem
-	{
-		public Position Position { get; internal set; }
-
-		public ParseWarning Warning { get; internal set; }
+		internal void Warning(Token token, WarningCode warning)
+		{
+			Calculator?.Warning(token, warning);
+		}
 	}
 }

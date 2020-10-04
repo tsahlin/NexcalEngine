@@ -15,7 +15,12 @@ namespace Nexcal.Engine.Operators
 
 		protected override Number Evaluate(Calculator calc, Number left, Number right)
 		{
-			throw new NotImplementedException();
+			// TODO: Hantera units och NumberBase
+			// behåll samma bas på ett "intelligent" sätt
+
+			left.Value += right.Value;
+
+			return left;
 		}
 
 		public override string ToString()

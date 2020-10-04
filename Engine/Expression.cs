@@ -1,7 +1,6 @@
 ﻿// Nexcal math engine library
 // MIT License - https://github.com/tsahlin/NexcalEngine
 
-using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -65,6 +64,8 @@ namespace Nexcal.Engine
 
 		public Token LastToken => Anchor?.RightToken;
 
+		private SortedDictionary<Precedence, List<Token>> PrecedenceMap { get; set; }
+
 		public string TokenNames
 		{
 			get
@@ -100,9 +101,18 @@ namespace Nexcal.Engine
 			Anchor.RightToken	= token;
 		}
 
-		public override Number Evaluate(Calculator calc)
+		internal override Number Evaluate(Calculator calc)
 		{
-			throw new NotImplementedException();
+			foreach (var item in PrecedenceMap)
+			{
+				foreach (var token in item.Value)
+					token.Evaluate(calc);
+			}
+
+			// TODO: Kolla att vi bara har EN token kvar, som ska vara Number
+			// Kör calc.Replace(this, med den number token)
+
+			return (Number)FirstToken;
 		}
 
 		public List<Token> GetList()
@@ -115,6 +125,28 @@ namespace Nexcal.Engine
 			}
 
 			return list;
+		}
+
+		/// <summary>Pre processes and creates a map of tokens ordered by precedence</summary>
+		internal override Token PreProcess(Calculator calc)
+		{
+			PrecedenceMap = new SortedDictionary<Precedence, List<Token>>();
+
+			// TODO: Omvandla binary add/subtract till unary ifall de följer en annan operator t.ex.
+			// eller om de är först i expression
+
+			for (Token t = FirstToken; t != Anchor; t = t.RightToken)
+				t = t.PreProcess(calc);
+
+			for (Token t = FirstToken; t != Anchor; t = t.RightToken)
+			{
+				if (!PrecedenceMap.ContainsKey(t.Precedence))
+					PrecedenceMap[t.Precedence] = new List<Token>();
+
+				PrecedenceMap[t.Precedence].Add(t);
+			}
+
+			return this;
 		}
 
 		public override string ToString()

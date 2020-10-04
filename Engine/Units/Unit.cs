@@ -12,7 +12,7 @@ namespace Nexcal.Engine.Units
 		{
 		}
 
-		public override Number Evaluate(Calculator calc)
+		internal override Number Evaluate(Calculator calc)
 		{
 			// Sätt left token Number.Unit = this
 			// Ersätt left token + this med bara left token

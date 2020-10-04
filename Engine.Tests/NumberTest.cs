@@ -22,13 +22,12 @@ namespace Nexcal.Engine.Tests
 		[InlineData("0x", ParseExpectation.HexNumber)]
 		[InlineData("0xg", ParseExpectation.HexNumber)]
 		[InlineData(".a", ParseExpectation.Number)]
-		[InlineData("a", ParseExpectation.Number)]
 		public void ExParseExpectation(string str, ParseExpectation expectation)
 		{
 			try
 			{
-				var parser = new Parser(str);
-				var number = Number.Parse(parser);
+				var calc	= new Calculator();
+				var number	= calc.Parse(str);
 			}
 			catch (ParseException e)
 			{
@@ -43,8 +42,8 @@ namespace Nexcal.Engine.Tests
 		[InlineData("0b11111111111111111111111111111111111111111111111111111", 9007199254740991)]
 		public void ParseBin(string bin, ulong value)
 		{
-			var parser = new Parser(bin);
-			var number = Number.Parse(parser);
+			var calc	= new Calculator();
+			var number	= (Number)calc.Parse(bin).FirstToken;
 
 			Assert.Equal(value, (ulong)number.Value);
 			Assert.Equal(NumberBase.Bin, number.Base);
@@ -58,8 +57,8 @@ namespace Nexcal.Engine.Tests
 		[InlineData("9007199254740991", 9007199254740991)]
 		public void ParseDec(string dec, double value)
 		{
-			var parser = new Parser(dec);
-			var number = Number.Parse(parser);
+			var calc	= new Calculator();
+			var number	= (Number)calc.Parse(dec).FirstToken;
 
 			Assert.Equal(value, number.Value);
 			Assert.Equal(NumberBase.Dec, number.Base);
@@ -72,8 +71,8 @@ namespace Nexcal.Engine.Tests
 		[InlineData("0x1FFFFFFFFFFFFF", 9007199254740991)]
 		public void ParseHex(string hex, ulong value)
 		{
-			var parser = new Parser(hex);
-			var number = Number.Parse(parser);
+			var calc	= new Calculator();
+			var number	= (Number)calc.Parse(hex).FirstToken;
 
 			Assert.Equal(value, (ulong)number.Value);
 			Assert.Equal(NumberBase.Hex, number.Base);

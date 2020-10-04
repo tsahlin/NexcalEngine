@@ -5,12 +5,14 @@ namespace Nexcal.Engine.Operators
 {
 	public abstract class BinaryOperator : Operator
 	{
-		public BinaryOperator(Position position) : base(position)
+		internal BinaryOperator(Position position) : base(position)
 		{
 		}
 
-		public override Number Evaluate(Calculator calc)
+		internal override Number Evaluate(Calculator calc)
 		{
+			// TODO: Kolla att left och right är valid operands (inte binaryoperator t.ex.)
+
 			var result = Evaluate(calc, LeftToken.Evaluate(calc), RightToken.Evaluate(calc));
 
 			calc.Replace(LeftToken, RightToken, result);

@@ -20,6 +20,11 @@ namespace Nexcal.Engine
 
 		public Token RightToken { get; internal set; }
 
-		public abstract Number Evaluate(Calculator calc);
+		internal abstract Number Evaluate(Calculator calc);
+
+		internal virtual Token PreProcess(Calculator calc)
+		{
+			return this;
+		}
 	}
 }

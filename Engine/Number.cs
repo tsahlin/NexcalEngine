@@ -29,7 +29,7 @@ namespace Nexcal.Engine
 
 		public double Value { get; set; } = 0;
 
-		public override Number Evaluate(Calculator calculator)
+		internal override Number Evaluate(Calculator calc)
 		{
 			return this;
 		}
@@ -103,7 +103,7 @@ namespace Nexcal.Engine
 			number.Position.CalculateLength(p.Position);
 
 			if (number.Value > MaxSafeInteger || number.Value < MinSafeInteger)
-				p.Warning(number.Position, ParseWarning.NumberOutOfSafeRange);
+				p.Warning(number, WarningCode.NumberOutOfSafeRange);
 
 			return number;
 		}

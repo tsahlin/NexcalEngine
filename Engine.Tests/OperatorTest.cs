@@ -14,10 +14,10 @@ namespace Nexcal.Engine.Tests
 		[InlineData("-", typeof(Subtract))]
 		public void Parse(string str, Type type)
 		{
-			var parser = new Parser(str);
-			var op = Operator.Parse(parser);
+			var calc = new Calculator();
+			var expr = calc.Parse(str);
 
-			Assert.Equal(type, op.GetType());
+			Assert.Equal(type, expr.FirstToken.GetType());
 		}
 	}
 }

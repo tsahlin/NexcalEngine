@@ -13,11 +13,12 @@ namespace Nexcal.Engine.Tests
 		[InlineData("5 mod 3", "Number,Modulo,Number", "5 mod 3")]
 		public void Parse(string expr, string names, string toStr)
 		{
-			var result = Parser.Parse(expr);
+			var calculator	= new Calculator();
+			var expression	= calculator.Parse(expr);
 
-			Assert.Equal(names, result.Expression.TokenNames);
-			Assert.Equal(toStr, result.Expression.ToString());
-			Assert.Empty(result.Warnings);
+			Assert.Equal(names, expression.TokenNames);
+			Assert.Equal(toStr, expression.ToString());
+			Assert.Empty(calculator.Warnings);
 		}
 	}
 }
