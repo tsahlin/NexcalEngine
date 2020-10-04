@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using Nexcal.Engine.Errors;
 
 namespace Nexcal.Engine.Units
 {
@@ -14,10 +15,16 @@ namespace Nexcal.Engine.Units
 
 		internal override Number Evaluate(Calculator calc)
 		{
-			// Sätt left token Number.Unit = this
-			// Ersätt left token + this med bara left token
-			// Om number redan har en unit = error
-			throw new NotImplementedException();
+			var number = LeftToken.Evaluate(calc);
+
+			if (number.Unit != null)
+				throw new CalculatorException(this, CalculatorError.UnitAlreadyAssigned);
+
+			number.Unit = this;
+
+			calc.Replace(number, this, number);
+
+			return number;
 		}
 
 		public abstract string Format(Number number);
@@ -25,6 +32,13 @@ namespace Nexcal.Engine.Units
 		internal static void InitIdentifierMap(Dictionary<string, Type> map)
 		{
 			map["m"]	= typeof(Meter);
+		}
+
+		internal override Token PreProcess(Calculator calc)
+		{
+			VerifyLeftNumber();
+
+			return this;
 		}
 	}
 }

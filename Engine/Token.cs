@@ -1,6 +1,8 @@
 ﻿// Nexcal math engine library
 // MIT License - https://github.com/tsahlin/NexcalEngine
 
+using Nexcal.Engine.Errors;
+
 namespace Nexcal.Engine
 {
 	public abstract class Token
@@ -25,6 +27,21 @@ namespace Nexcal.Engine
 		internal virtual Token PreProcess(Calculator calc)
 		{
 			return this;
+		}
+
+		protected Number RequireLeftNumber(Calculator calc)
+		{
+			VerifyLeftNumber();
+
+			return LeftToken.Evaluate(calc);
+		}
+
+		protected void VerifyLeftNumber()
+		{
+			if (LeftToken is Number || LeftToken is Expression)
+				return;
+
+			throw new CalculatorException(this, CalculatorError.LeftNumberRequired);
 		}
 	}
 }

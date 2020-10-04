@@ -5,5 +5,21 @@ namespace Nexcal.Engine.Errors
 {
 	public class CalculatorException : NexcalException
 	{
+		public CalculatorException(Token token, CalculatorError error)
+		{
+			Token	= token;
+			Error	= error;
+		}
+
+		public CalculatorError Error { get; set; } = CalculatorError.Unknown;
+
+		public Token Token { get; set; }
+	}
+
+	public enum CalculatorError
+	{
+		Unknown = 0,            // Default
+		LeftNumberRequired,
+		UnitAlreadyAssigned
 	}
 }
