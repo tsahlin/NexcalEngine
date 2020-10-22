@@ -40,6 +40,8 @@ namespace Nexcal.Engine.Errors
 		HexNumber,
 		Identifier,
 		Number,
-		Operator
+		Operator,
+		RoundClosingBracket,
+		RoundOpeningBracket
 	}
 }

@@ -3,6 +3,9 @@
 
 using System.Collections.Generic;
 using System.Text;
+using Nexcal.Engine.Delimiters;
+using Nexcal.Engine.Functions;
+using Nexcal.Engine.Operators;
 
 namespace Nexcal.Engine
 {
@@ -82,8 +85,11 @@ namespace Nexcal.Engine
 			}
 		}
 
-		public void Add(Token token)
+		public void Add(Token token, Parser parser = null)
 		{
+			if (parser != null)
+				token.Position.CalculateLength(parser.Position);
+
 			if (Anchor == null)
 			{
 				Anchor = new Anchor(Position);
@@ -125,6 +131,61 @@ namespace Nexcal.Engine
 			}
 
 			return list;
+		}
+
+		public static Expression Parse(Parser p, string stop = "")
+		{
+			var expression	= new Expression(p.Position);
+			var stopChars	= new HashSet<char>(stop.ToCharArray());
+
+			while (p.Position < p.ExpressionString.Length)
+			{
+				char chr = p.CurrentChar;
+
+				if (stopChars.Contains(chr))
+					break;
+				else if (char.IsWhiteSpace(chr))
+				{
+					if (chr == '\n')
+						p.Position.NewLine();
+					else
+						p.Position.Advance();
+
+					continue;
+				}
+
+				Token token = null;
+
+				if (char.IsDigit(chr) || chr == '.')
+					token = Number.Parse(p);
+				else if (Operator.Chars.Contains(chr))
+					token = Operator.Parse(p);
+				else if (char.IsLetter(chr))
+					token = p.ParseIdentifier();
+				else if (chr == '(')
+					token = RoundOpeningBracket.Parse(p);
+				else
+				{
+					// TODO: Unsupported char
+				}
+
+				expression.Add(token, p);
+
+				if (token is FunctionCall call)
+				{
+					call.ParseArguments(p);
+					call.Position.CalculateLength(p.Position);
+				}
+				else if (token is RoundOpeningBracket)
+				{
+					expression.Add(Parse(p, ")"), p);
+					expression.Add(RoundClosingBracket.Parse(p), p);
+				}
+			}
+
+			expression.Position.CalculateLength(p.Position);
+
+			return expression;
 		}
 
 		/// <summary>Pre processes and creates a map of tokens ordered by precedence</summary>

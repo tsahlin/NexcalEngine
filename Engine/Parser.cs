@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Nexcal.Engine.Errors;
+using Nexcal.Engine.Functions;
 using Nexcal.Engine.Operators;
 using Nexcal.Engine.Units;
 
@@ -35,6 +36,7 @@ namespace Nexcal.Engine
 				{
 					identifierMap = new Dictionary<string, Type>();
 
+					FunctionCall.InitIdentifierMap(identifierMap);
 					Operator.InitIdentifierMap(identifierMap);
 					Unit.InitIdentifierMap(identifierMap);
 				}
@@ -52,10 +54,10 @@ namespace Nexcal.Engine
 			ExpressionString	= expression;
 			Position			= new Position();
 
-			return ParseSubExpression();
+			return Expression.Parse(this);
 		}
 
-		private Token ParseIdentifier()
+		internal Token ParseIdentifier()
 		{
 			var regex = new Regex(@"[a-z][0-9a-z]*", RegexOptions.IgnoreCase);
 			var match = regex.Match(ExpressionString, Position);
@@ -74,50 +76,6 @@ namespace Nexcal.Engine
 			}
 
 			throw new ParseException(startPos, ParseError.UnknownIdentifier);
-		}
-
-		private Expression ParseSubExpression(string stop = "")
-		{
-			var stopChars	= new HashSet<char>(stop.ToCharArray());
-			var expression	= new Expression(Position);
-
-			while (Position < ExpressionString.Length)
-			{
-				char chr = CurrentChar;
-
-				if (stopChars.Contains(chr))
-					break;
-				else if (char.IsWhiteSpace(chr))
-				{
-					if (chr == '\n')
-						Position.NewLine();
-					else
-						Position.Advance();
-
-					continue;
-				}
-
-				Token token = null;
-
-				if (char.IsDigit(chr) || chr == '.')
-					token = Number.Parse(this);
-				else if (Operator.Chars.Contains(chr))
-					token = Operator.Parse(this);
-				else if (char.IsLetter(chr))
-					token = ParseIdentifier();
-				else
-				{
-					// TODO: Unsupported char
-				}
-
-				token.Position.CalculateLength(Position);
-
-				expression.Add(token);
-			}
-
-			expression.Position.CalculateLength(Position);
-
-			return expression;
 		}
 
 		internal void Warning(Position position, WarningCode warning)

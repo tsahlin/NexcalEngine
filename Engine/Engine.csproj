@@ -10,6 +10,7 @@
     <Folder Include="Operators\" />
     <Folder Include="Functions\" />
     <Folder Include="Errors\" />
+    <Folder Include="Delimiters\" />
   </ItemGroup>
 
   <ItemGroup>

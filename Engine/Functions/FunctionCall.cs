@@ -25,8 +25,9 @@ namespace Nexcal.Engine.Functions
 			map["sin"]	= typeof(Sine);
 		}
 
-		public static FunctionCall Parse(Parser p)
+		internal void ParseArguments(Parser p)
 		{
+			// Nästa tecken skall vara (
 			throw new NotImplementedException();
 			//Operator op;
 

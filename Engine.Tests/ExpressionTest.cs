@@ -24,7 +24,7 @@ namespace Nexcal.Engine.Tests
 
 		[Theory]
 		[InlineData("1+2", 3)]
-		//[InlineData("1+2*3/-2", -2)]
+		[InlineData("2*(-3+5)/-2", -2)]
 		public void Evaluate(string expr, double result)
 		{
 			var calculator	= new Calculator();

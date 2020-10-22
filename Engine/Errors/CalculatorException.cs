@@ -20,6 +20,7 @@ namespace Nexcal.Engine.Errors
 	{
 		Unknown = 0,            // Default
 		LeftNumberRequired,
+		RightNumberRequired,
 		UnitAlreadyAssigned
 	}
 }

@@ -36,12 +36,27 @@ namespace Nexcal.Engine
 			return LeftToken.Evaluate(calc);
 		}
 
+		protected Number RequireRightNumber(Calculator calc)
+		{
+			VerifyRightNumber();
+
+			return RightToken.Evaluate(calc);
+		}
+
 		protected void VerifyLeftNumber()
 		{
 			if (LeftToken is Number || LeftToken is Expression)
 				return;
 
 			throw new CalculatorException(this, CalculatorError.LeftNumberRequired);
+		}
+
+		protected void VerifyRightNumber()
+		{
+			if (RightToken is Number || RightToken is Expression)
+				return;
+
+			throw new CalculatorException(this, CalculatorError.RightNumberRequired);
 		}
 	}
 }

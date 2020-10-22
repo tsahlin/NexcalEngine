@@ -11,9 +11,9 @@ namespace Nexcal.Engine.Operators
 
 		internal override Number Evaluate(Calculator calc)
 		{
-			// TODO: Kolla att left och right är valid operands (inte binaryoperator t.ex.)
-
-			var result = Evaluate(calc, LeftToken.Evaluate(calc), RightToken.Evaluate(calc));
+			var left	= RequireLeftNumber(calc);
+			var right	= RequireRightNumber(calc);
+			var result	= Evaluate(calc, left, right);
 
 			calc.Replace(LeftToken, RightToken, result);
 
