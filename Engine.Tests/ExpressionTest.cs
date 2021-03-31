@@ -12,19 +12,20 @@ namespace Nexcal.Engine.Tests
 		public void Add()
 		{
 			var expr = new Expression(new Position());
-			Assert.Equal("<null>", expr.DebugList);
+			Assert.Equal("<null>", expr.AnchorList);
 
 			expr.Add(new Number(new Position()));
-			Assert.Equal("| <--- Anchor\n|\n| <--> Number\n|\n| ---> Anchor", expr.DebugList);
+			Assert.Equal("| <--- Anchor\n|\n| <--> Number\n|\n| ---> Anchor", expr.AnchorList);
 
 			expr.Add(new Add(new Position()));
 			expr.Add(new Number(new Position()));
-			Assert.Equal("| <--- Anchor\n|\n| <--> Number\n| <--> Add\n| <--> Number\n|\n| ---> Anchor", expr.DebugList);
+			Assert.Equal("| <--- Anchor\n|\n| <--> Number\n| <--> Add\n| <--> Number\n|\n| ---> Anchor", expr.AnchorList);
 		}
 
 		[Theory]
-		[InlineData("1+2", 3)]
-		[InlineData("2*(-3+5)/-2", -2)]
+		//[InlineData("1+2", 3)]
+		[InlineData("0+(1+2)", 3)]
+		//[InlineData("2*(-3+5)/-2", -2)]
 		public void Evaluate(string expr, double result)
 		{
 			var calculator	= new Calculator();

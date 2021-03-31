@@ -17,7 +17,7 @@ namespace Nexcal.Engine
 
 		public Anchor Anchor { get; internal set; }
 
-		public string DebugList
+		public string AnchorList
 		{
 			get
 			{
@@ -85,6 +85,8 @@ namespace Nexcal.Engine
 			}
 		}
 
+		public string TreeList => GetTreeList(0);
+
 		public void Add(Token token, Parser parser = null)
 		{
 			if (parser != null)
@@ -131,6 +133,25 @@ namespace Nexcal.Engine
 			}
 
 			return list;
+		}
+
+		private string GetTreeList(int indentation)
+		{
+			var indent = new string(' ', indentation * 2);
+			var sb = new StringBuilder();
+
+			for (Token t = FirstToken; t != Anchor; t = t.RightToken)
+			{
+				if (t is Expression expr)
+					sb.Append(expr.GetTreeList(indentation + 1));
+				else
+				{
+					var str = t.ToString().Trim();
+					sb.Append($"{indent}{str}".PadRight(20)).AppendLine(t.Position.ToString());
+				}
+			}
+
+			return sb.ToString();
 		}
 
 		public static Expression Parse(Parser p, string stop = "")
