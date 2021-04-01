@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Nexcal.Engine.Delimiters;
 using Nexcal.Engine.Errors;
 using Nexcal.Engine.Functions;
 using Nexcal.Engine.Operators;
@@ -54,7 +55,55 @@ namespace Nexcal.Engine
 			ExpressionString	= expression;
 			Position			= new Position();
 
-			return Expression.Parse(this);
+			return ParseExpression();
+		}
+
+		internal Expression ParseExpression(string stop = "")
+		{
+			var expression	= new Expression(Position);
+			var stopChars	= new HashSet<char>(stop.ToCharArray());
+
+			while (CharsLeft > 0)
+			{
+				SkipWhiteSpace();
+
+				char chr = CurrentChar;
+
+				if (stopChars.Contains(chr))
+					break;
+
+				Token token = null;
+
+				if (char.IsDigit(chr) || chr == '.')
+					token = Number.Parse(this);
+				else if (Operator.Chars.Contains(chr))
+					token = Operator.Parse(this);
+				else if (char.IsLetter(chr))
+					token = ParseIdentifier();
+				else if (chr == '(')
+					token = RoundOpeningBracket.Parse(this);
+				else
+				{
+					// TODO: Unsupported char
+				}
+
+				expression.Add(token, this);
+
+				if (token is FunctionCall call)
+				{
+					call.ParseArguments(this);
+					call.Position.CalculateLength(Position);
+				}
+				else if (token is RoundOpeningBracket)
+				{
+					expression.Add(ParseExpression(")"), this);
+					expression.Add(RoundClosingBracket.Parse(this), this);
+				}
+			}
+
+			expression.Position.CalculateLength(Position);
+
+			return expression;
 		}
 
 		internal Token ParseIdentifier()
@@ -76,6 +125,22 @@ namespace Nexcal.Engine
 			}
 
 			throw new ParseException(startPos, ParseError.UnknownIdentifier);
+		}
+
+		internal void SkipWhiteSpace()
+		{
+			while (CharsLeft > 0)
+			{
+				char chr = CurrentChar;
+
+				if (!char.IsWhiteSpace(chr))
+					break;
+
+				if (chr == '\n')
+					Position.NewLine();
+				else
+					Position.Advance();
+			}
 		}
 
 		internal void Warning(Position position, WarningCode warning)

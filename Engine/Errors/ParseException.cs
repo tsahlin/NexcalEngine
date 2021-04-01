@@ -6,12 +6,14 @@ namespace Nexcal.Engine.Errors
 	public class ParseException : NexcalException
 	{
 		public ParseException(Position position, ParseError error)
+			: base($"Parse error {error} at {position}")
 		{
 			Position	= position.Clone;
 			Error		= error;
 		}
 
 		public ParseException(Position position, ParseExpectation expectation)
+			: base($"Syntax error, expected {expectation} at {position}")
 		{
 			Position	= position.Clone;
 			Expectation	= expectation;
@@ -37,6 +39,7 @@ namespace Nexcal.Engine.Errors
 	{
 		None = 0,
 		BinNumber,
+		Expression,
 		HexNumber,
 		Identifier,
 		Number,

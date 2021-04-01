@@ -13,8 +13,7 @@ namespace Nexcal.Engine.Functions
 
 		public override string ToString()
 		{
-			//return "sin(";
-			throw new NotImplementedException();
+			return $"sin({ArgString})";
 		}
 	}
 }

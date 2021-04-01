@@ -3,6 +3,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text;
+using Nexcal.Engine.Delimiters;
 using Nexcal.Engine.Errors;
 
 namespace Nexcal.Engine.Functions
@@ -11,6 +13,24 @@ namespace Nexcal.Engine.Functions
 	{
 		public FunctionCall(Position position) : base(position)
 		{
+		}
+
+		protected List<Token> Args { get; } = new List<Token>();
+
+		protected string ArgString
+		{
+			get
+			{
+				var sb = new StringBuilder();
+
+				foreach (var arg in Args)
+					sb.Append(arg.ToString()).Append(", ");
+
+				if (sb.Length > 0)
+					sb.Length -= 2;
+
+				return sb.ToString();
+			}
 		}
 
 		public override Precedence Precedence => Precedence.Primary;
@@ -27,28 +47,32 @@ namespace Nexcal.Engine.Functions
 
 		internal void ParseArguments(Parser p)
 		{
-			// Nästa tecken skall vara (
-			throw new NotImplementedException();
-			//Operator op;
+			p.SkipWhiteSpace();
+			RoundOpeningBracket.Parse(p);
 
-			//switch (p.CurrentChar)
-			//{
-			//	case '+':
-			//		op = new Add(p.Position);
-			//		break;
+			while (p.CharsLeft > 0)
+			{
+				var arg = p.ParseExpression(",)");
 
-			//	case '-':
-			//		op = new Subtract(p.Position);
-			//		break;
+				if (arg.IsEmpty)
+				{
+					if (Args.Count > 0 || p.CurrentChar == ',')
+						throw new ParseException(p.Position, ParseExpectation.Expression);
 
-			//	default:
-			//		throw new ParseException(p.Position, ParseExpectation.Operator);
-			//}
+					break;
+				}
 
-			//p.Position.Advance();
-			//op.Position.CalculateLength(p.Position);
+				Args.Add(arg);
 
-			//return op;
+				if (p.CurrentChar != ',')
+					break;
+				else if (p.CharsLeft == 1)			// , is the last character
+					throw new ParseException(p.Position, ParseExpectation.Expression);
+
+				p.Position.Advance();
+			}
+
+			RoundClosingBracket.Parse(p);
 		}
 	}
 }

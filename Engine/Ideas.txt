@@ -1,0 +1,41 @@
+﻿- FORTSÄTT
+	Har fixat parsning av funktionsargument
+		Fortsätt och skapa ParserTest som kollar att rätt exceptions kastas vid parsing-Filtrera
+		
+
+	Har skapat Engine.CLI för snabbare testning
+		Behöver fortsätta med PreProcess - hantera function calls och parenteser här?
+
+	Lade till Delimiters, RoundOpeningBracket
+		Fortsätt i ParseExpression, efter vi har lagt till RoundOpeningBracket - anropa ParseExpression
+
+	PreProcess kommer anropas innan Evaluate. Saker att göra där:
+		Kolla att rätt typ av tokens är bredvid varje token
+		Omvandla binary add/subtract till unary plus/minus där det behövs
+
+	Ändra Calculator API m.m.
+
+	Gjorde ParseIdentifier och lade till maps med identifier -> Type
+
+	Gjorde Operator.Parse. Vi bör kunna göra ett ParserTest nu.
+
+	Gjorde klart Expression.Add med DebugList-funktion som listar
+	alla tokens i listan. Lade till ett ankare i Expression. Detta så att Calculator ska kunna
+	modifiera listan utan att man tappar referenserna till first/last token.
+
+- Filtrera text som klistras in i editorn
+	Om man klistrar in tal med tusentalsavgränsare och komma t.ex., ändra om till standardformat
+	Med tanke på funktionssyntax MÅSTE vi alltid använda "kodformat" (komma = .) och inga
+	tusentalsavgränsare
+
+API
+
+var calc = new Calculator();
+
+Expression expr = calc.Parse("1+2*3");
+
+Number result = calc.Calculate(expr);
+
+Number num = calc.Calculate("1+2*3");
+
+calc.ClearWarnings();

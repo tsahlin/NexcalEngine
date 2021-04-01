@@ -11,6 +11,7 @@ namespace Nexcal.Engine.Tests
 		[InlineData("1+2-3", "Number,Add,Number,Subtract,Number", "1 + 2 - 3")]
 		[InlineData("10m", "Number,Meter", "10m")]
 		[InlineData("5 mod 3", "Number,Modulo,Number", "5 mod 3")]
+		[InlineData("3+sin(.5)", "Number,Add,Sine", "3 + sin(0.5)")]
 		public void Parse(string expr, string names, string toStr)
 		{
 			var calculator	= new Calculator();
@@ -20,5 +21,7 @@ namespace Nexcal.Engine.Tests
 			Assert.Equal(toStr, expression.ToString());
 			Assert.Empty(calculator.Warnings);
 		}
+
+		// TODO: Make tests for ParseException, like "sin(0,", assert exception position and expectation
 	}
 }
