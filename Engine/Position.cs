@@ -31,17 +31,25 @@ namespace Nexcal.Engine
 			return Index += chars;
 		}
 
-		public int CalculateLength(Position end)
-		{
-			return Length = end - Index;
-		}
-
 		public int NewLine()
 		{
 			Index++;
 			Column = 0;
 
 			return ++Line;
+		}
+
+		public void SetRange(Position start, Position end)
+		{
+			Index = start.Index;
+			Column = start.Column;
+			Line = start.Line;
+			Length = end.Index + end.Length - Index;
+		}
+
+		public void SetStop(Position end)
+		{
+			Length = end.Index - Index;
 		}
 
 		public override string ToString()

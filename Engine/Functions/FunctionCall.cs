@@ -37,6 +37,8 @@ namespace Nexcal.Engine.Functions
 
 		internal override Number Evaluate(Calculator calc)
 		{
+			calc.DebugEvaluate(this);
+			
 			throw new NotImplementedException();
 		}
 

@@ -13,14 +13,11 @@ namespace Nexcal.Engine.Operators
 
 		public override Precedence Precedence => Precedence.Additive;
 
-		protected override Number Evaluate(Calculator calc, Number left, Number right)
+		protected override void Evaluate(Calculator calc, Number left, Number right, Number result)
 		{
+			result.Value += right.Value;
 			// TODO: Hantera units och NumberBase
 			// behåll samma bas på ett "intelligent" sätt
-
-			left.Value += right.Value;
-
-			return left;
 		}
 
 		public override string ToString()

@@ -13,7 +13,7 @@ namespace Nexcal.Engine.Operators
 
 		public override Precedence Precedence => Precedence.Multiplicative;
 
-		protected override Number Evaluate(Calculator calc, Number left, Number right)
+		protected override void Evaluate(Calculator calc, Number left, Number right, Number result)
 		{
 			throw new NotImplementedException();
 		}

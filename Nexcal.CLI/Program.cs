@@ -22,28 +22,10 @@ namespace Nexcal.CLI
 
 				if (input == "exit" || input == "quit")
 					break;
-				else if (input == "anchors:on")
-				{
-					ShowAnchors = true;
-					Console.WriteLine("Anchor output enabled");
-				}
-				else if (input == "anchors:off")
-				{
-					ShowAnchors = false;
-					Console.WriteLine("Anchor output disabled");
-				}
-				else if (input == "tree:on")
-				{
-					ShowTree = true;
-					Console.WriteLine("Tree output enabled");
-				}
-				else if (input == "tree:off")
-				{
-					ShowTree = false;
-					Console.WriteLine("Tree output disabled");
-				}
-				else
-					Calc(input);
+				else if (HandleOptions(input))
+					continue;
+
+				Calc(input);
 			}
 		}
 
@@ -70,6 +52,52 @@ namespace Nexcal.CLI
 			{
 				Console.WriteLine(e.Message);
 			}
+		}
+
+		static bool HandleOptions(string input)
+		{
+			switch (input)
+			{
+				case "anchors:on":
+					ShowAnchors = true;
+					Console.WriteLine("Anchor output enabled");
+					break;
+
+				case "anchors:off":
+					ShowAnchors = false;
+					Console.WriteLine("Anchor output disabled");
+					break;
+
+				case "debug:on":
+					Calculator.DebugLogger = LogDebugMessage;
+					Console.WriteLine("Debug logging enabled");
+					break;
+
+				case "debug:off":
+					Calculator.DebugLogger = null;
+					Console.WriteLine("Debug logging disabled");
+					break;
+
+				case "tree:on":
+					ShowTree = true;
+					Console.WriteLine("Tree output enabled");
+					break;
+
+				case "tree:off":
+					ShowTree = false;
+					Console.WriteLine("Tree output disabled");
+					break;
+
+				default:
+					return false;
+			}
+
+			return true;
+		}
+
+		static void LogDebugMessage(string message)
+		{
+			Console.WriteLine(message);
 		}
 	}
 }

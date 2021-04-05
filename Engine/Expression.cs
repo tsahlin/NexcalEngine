@@ -1,6 +1,8 @@
 ﻿// Nexcal math engine library
 // MIT License - https://github.com/tsahlin/NexcalEngine
 
+using Nexcal.Engine.Delimiters;
+using Nexcal.Engine.Errors;
 using System.Collections.Generic;
 using System.Text;
 
@@ -66,6 +68,8 @@ namespace Nexcal.Engine
 
 		public Token LastToken => Anchor?.RightToken;
 
+		public override Precedence Precedence => Precedence.Primary;
+
 		private SortedDictionary<Precedence, List<Token>> PrecedenceMap { get; set; }
 
 		public string TokenNames
@@ -89,7 +93,7 @@ namespace Nexcal.Engine
 		public void Add(Token token, Parser parser = null)
 		{
 			if (parser != null)
-				token.Position.CalculateLength(parser.Position);
+				token.Position.SetStop(parser.Position);
 
 			if (Anchor == null)
 			{
@@ -108,18 +112,37 @@ namespace Nexcal.Engine
 			Anchor.RightToken	= token;
 		}
 
+		public void Clear()
+		{
+			DisposeTokens(GetList());
+			Anchor = null;
+		}
+
 		internal override Number Evaluate(Calculator calc)
 		{
+			calc.DebugEvaluate(this);
+
 			foreach (var item in PrecedenceMap)
 			{
 				foreach (var token in item.Value)
-					token.Evaluate(calc);
+				{
+					if (token.IsLinked)
+						token.Evaluate(calc);
+				}
 			}
 
-			// TODO: Kolla att vi bara har EN token kvar, som ska vara Number
-			// Kör calc.Replace(this, med den number token)
+			if (FirstToken != LastToken)
+				throw new CalculatorException(this, CalculatorError.EvaluationResidue);
 
-			return (Number)FirstToken;
+			if (FirstToken is Number result)
+			{
+				Clear();
+				result.Replace(this);
+
+				return result;
+			}
+
+			throw new CalculatorException(this, CalculatorError.NonNumberResult);
 		}
 
 		public List<Token> GetList()
@@ -153,8 +176,22 @@ namespace Nexcal.Engine
 			return sb.ToString();
 		}
 
+		public void Prepend(Token token)
+		{
+			if (Anchor == null)
+				Add(token);
+			else
+			{
+				token.RightToken		= FirstToken;
+				FirstToken.LeftToken	= token;
+
+				token.LeftToken			= Anchor;
+				Anchor.LeftToken		= token;
+			}
+		}
+
 		/// <summary>Pre processes and creates a map of tokens ordered by precedence</summary>
-		internal override Token PreProcess(Calculator calc)
+		internal override Token PreProcess(Parser parser)
 		{
 			PrecedenceMap = new SortedDictionary<Precedence, List<Token>>();
 
@@ -162,7 +199,7 @@ namespace Nexcal.Engine
 			// eller om de är först i expression
 
 			for (Token t = FirstToken; t != Anchor; t = t.RightToken)
-				t = t.PreProcess(calc);
+				t = t.PreProcess(parser);
 
 			for (Token t = FirstToken; t != Anchor; t = t.RightToken)
 			{
@@ -183,6 +220,33 @@ namespace Nexcal.Engine
 				sb.Append(t.ToString());
 
 			return sb.ToString();
+		}
+	}
+
+	class RoundBracketExpression : Expression
+	{
+		public RoundBracketExpression(Position position) : base(position)
+		{
+		}
+
+		public static RoundBracketExpression Parse(Parser p)
+		{
+			var subExpr = new RoundBracketExpression(p.Position);
+
+			RoundOpeningBracket.Parse(p);
+			p.ParseExpression(")", subExpr);
+			RoundClosingBracket.Parse(p);
+
+			subExpr.Position.SetStop(p.Position);
+
+			return subExpr;
+		}
+
+		public override string ToString()
+		{
+			var sb = new StringBuilder();
+
+			return sb.Append("(").Append(base.ToString()).Append(")").ToString();
 		}
 	}
 

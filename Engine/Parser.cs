@@ -4,7 +4,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using Nexcal.Engine.Delimiters;
 using Nexcal.Engine.Errors;
 using Nexcal.Engine.Functions;
 using Nexcal.Engine.Operators;
@@ -58,10 +57,12 @@ namespace Nexcal.Engine
 			return ParseExpression();
 		}
 
-		internal Expression ParseExpression(string stop = "")
+		internal Expression ParseExpression(string stop = "", Expression expression = null)
 		{
-			var expression	= new Expression(Position);
-			var stopChars	= new HashSet<char>(stop.ToCharArray());
+			var stopChars = new HashSet<char>(stop.ToCharArray());
+
+			if (expression == null)
+				expression = new Expression(Position);
 
 			while (CharsLeft > 0)
 			{
@@ -81,7 +82,7 @@ namespace Nexcal.Engine
 				else if (char.IsLetter(chr))
 					token = ParseIdentifier();
 				else if (chr == '(')
-					token = RoundOpeningBracket.Parse(this);
+					token = RoundBracketExpression.Parse(this);
 				else
 				{
 					// TODO: Unsupported char
@@ -92,18 +93,13 @@ namespace Nexcal.Engine
 				if (token is FunctionCall call)
 				{
 					call.ParseArguments(this);
-					call.Position.CalculateLength(Position);
-				}
-				else if (token is RoundOpeningBracket)
-				{
-					expression.Add(ParseExpression(")"), this);
-					expression.Add(RoundClosingBracket.Parse(this), this);
+					call.Position.SetStop(Position);
 				}
 			}
 
-			expression.Position.CalculateLength(Position);
+			expression.Position.SetStop(Position);
 
-			return expression;
+			return (Expression)expression.PreProcess(this);
 		}
 
 		internal Token ParseIdentifier()

@@ -29,8 +29,20 @@ namespace Nexcal.Engine
 
 		public double Value { get; set; } = 0;
 
+		internal Number Clone()
+		{
+			var clone = (Number)MemberwiseClone();
+
+			clone.LeftToken = null;
+			clone.RightToken = null;
+
+			return clone;
+		}
+
 		internal override Number Evaluate(Calculator calc)
 		{
+			calc.DebugEvaluate(this);
+			
 			return this;
 		}
 
@@ -100,7 +112,7 @@ namespace Nexcal.Engine
 				number.SetValue(NumberBase.Dec, match.Value);
 			}
 
-			number.Position.CalculateLength(p.Position);
+			number.Position.SetStop(p.Position);
 
 			if (number.Value > MaxSafeInteger || number.Value < MinSafeInteger)
 				p.Warning(number, WarningCode.NumberOutOfSafeRange);

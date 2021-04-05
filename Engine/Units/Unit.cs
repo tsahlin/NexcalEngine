@@ -13,6 +13,8 @@ namespace Nexcal.Engine.Units
 		{
 		}
 
+		public override Precedence Precedence => Precedence.Unit;
+
 		internal override Number Evaluate(Calculator calc)
 		{
 			var number = LeftToken.Evaluate(calc);
@@ -22,7 +24,7 @@ namespace Nexcal.Engine.Units
 
 			number.Unit = this;
 
-			calc.Replace(number, this, number);
+			number.Replace(number, this);
 
 			return number;
 		}
@@ -34,7 +36,7 @@ namespace Nexcal.Engine.Units
 			map["m"]	= typeof(Meter);
 		}
 
-		internal override Token PreProcess(Calculator calc)
+		internal override Token PreProcess(Parser parser)
 		{
 			VerifyLeftNumber();
 

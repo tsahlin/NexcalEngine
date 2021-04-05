@@ -11,15 +11,21 @@ namespace Nexcal.Engine.Operators
 
 		internal override Number Evaluate(Calculator calc)
 		{
+			calc.DebugEvaluate(this);
+			
 			var left	= RequireLeftNumber(calc);
 			var right	= RequireRightNumber(calc);
-			var result	= Evaluate(calc, left, right);
+			var result	= left.Clone();
 
-			calc.Replace(LeftToken, RightToken, result);
+			result.Position.Length = RightToken.Position.Index + RightToken.Position.Length - LeftToken.Position.Index;
+
+			Evaluate(calc, left, right, result);
+
+			result.Replace(LeftToken, RightToken);
 
 			return result;
 		}
 
-		protected abstract Number Evaluate(Calculator calc, Number left, Number right);
+		protected abstract void Evaluate(Calculator calc, Number left, Number right, Number result);
 	}
 }

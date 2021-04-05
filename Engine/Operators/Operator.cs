@@ -41,7 +41,7 @@ namespace Nexcal.Engine.Operators
 			}
 
 			p.Position.Advance();
-			op.Position.CalculateLength(p.Position);
+			op.Position.SetStop(p.Position);
 
 			return op;
 		}

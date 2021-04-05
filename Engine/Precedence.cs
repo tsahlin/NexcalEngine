@@ -5,8 +5,11 @@ namespace Nexcal.Engine
 {
 	public enum Precedence
 	{
-		/// <summary>Function calls, units</summary>
+		/// <summary>Function calls, sub expressions</summary>
 		Primary,
+
+		/// <summary>Units</summary>
+		Unit,
 
 		/// <summary>+x, -x, x!</summary>
 		Unary,

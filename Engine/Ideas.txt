@@ -1,7 +1,13 @@
 ﻿- FORTSÄTT
+	Har fixat parsning av parenteser - blir RoundBracketExpression
+		Fixa PreProcess, unary operatorer
+			Görs av parsern direkt efter parsning av expression
+		Fixa räkning med units
+		Fixa funktions-Evaluate
+
 	Har fixat parsning av funktionsargument
 		Fortsätt och skapa ParserTest som kollar att rätt exceptions kastas vid parsing-Filtrera
-		
+
 
 	Har skapat Engine.CLI för snabbare testning
 		Behöver fortsätta med PreProcess - hantera function calls och parenteser här?
