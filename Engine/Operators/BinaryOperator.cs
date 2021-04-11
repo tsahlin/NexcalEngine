@@ -15,17 +15,14 @@ namespace Nexcal.Engine.Operators
 			
 			var left	= RequireLeftNumber(calc);
 			var right	= RequireRightNumber(calc);
-			var result	= left.Clone();
+			var result	= Evaluate(calc, left, right);
 
-			result.Position.Length = RightToken.Position.Index + RightToken.Position.Length - LeftToken.Position.Index;
-
-			Evaluate(calc, left, right, result);
-
-			result.Replace(LeftToken, RightToken);
+			result.Position.Length = right.Position.Index + right.Position.Length - left.Position.Index;
+			result.Replace(left, right);
 
 			return result;
 		}
 
-		protected abstract void Evaluate(Calculator calc, Number left, Number right, Number result);
+		protected abstract Number Evaluate(Calculator calc, Number left, Number right);
 	}
 }

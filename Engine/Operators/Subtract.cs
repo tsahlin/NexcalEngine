@@ -13,8 +13,9 @@ namespace Nexcal.Engine.Operators
 
 		public override Precedence Precedence => Precedence.Additive;
 
-		protected override void Evaluate(Calculator calc, Number left, Number right, Number result)
+		protected override Number Evaluate(Calculator calc, Number left, Number right)
 		{
+			// TODO: Invert sign of right and then use operator add
 			throw new NotImplementedException();
 		}
 

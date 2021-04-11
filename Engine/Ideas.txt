@@ -1,4 +1,7 @@
 ﻿- FORTSÄTT
+	Fixa testet 5+3m, Unit-beräkning
+		Add har en statisk Calc-funktion för att kunna anropas från Subtract
+
 	Har fixat parsning av parenteser - blir RoundBracketExpression
 		Fixa PreProcess, unary operatorer
 			Görs av parsern direkt efter parsning av expression

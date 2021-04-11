@@ -140,7 +140,7 @@ namespace Nexcal.Engine
 			if (Unit != null)
 				return Unit.Format(this);
 
-			return Value.ToString();
+			return Value.ToString("R", CultureInfo.InvariantCulture);
 		}
 	}
 
