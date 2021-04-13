@@ -5,8 +5,12 @@ namespace Nexcal.Engine
 {
 	public class Position
 	{
+		public static Position Unknown => new Position() { Index = -1 };
+
 		/// <summary>Zero based index in the expression string</summary>
 		public int Index { get; set; } = 0;
+
+		public bool IsUnknown => Index < 0;
 
 		/// <summary>Number of characters</summary>
 		public int Length { get; set; } = 0;
@@ -54,7 +58,7 @@ namespace Nexcal.Engine
 
 		public override string ToString()
 		{
-			return $"Index {Index}: Column {Column} on Line {Line}";
+			return IsUnknown ? "Unknown position" : $"Index {Index}: Column {Column} on Line {Line}";
 		}
 	}
 }

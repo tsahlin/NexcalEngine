@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Nexcal.Engine.Units
+namespace Nexcal.Engine.Units.Length
 {
 	public class Meter : LengthUnit
 	{

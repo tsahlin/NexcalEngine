@@ -1,4 +1,23 @@
 ﻿- FORTSÄTT
+	Gjort jobb med units
+		Lägg upp tester härnäst
+		Number.Add
+		Number.Multiply
+		Number.Subtract - Number.Add + Negate
+
+	GetProductUnit
+		Ska returnera resultat-enhet vid multiplikation, ex. m * m = m^2
+
+	GetSumUnit
+		Returnerar resultat-enhet vid addition, ex
+			m + mm = m (använd den som står först)
+			12:45 + 5min = 12:50 (Time)
+			5min + 12:45 = 12:50 (Time)
+			1h + 5min - 3s = 1:04:57 (TimeInterval)
+			2021-02-13 + 3d = 2021-02-16 (Date + DateInterval = Date)
+			2021-02-13 + 3d + 2h = 2021-02-16 02:00:00 (Date + DateInterval + TimeInterval = DateTime)
+			2021-02-13 + 12:50 = 2021-02-13 12:50:00 (Date + Time = DateTime)
+
 	Fixa testet 5+3m, Unit-beräkning
 		Add har en statisk Calc-funktion för att kunna anropas från Subtract
 

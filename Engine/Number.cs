@@ -17,6 +17,10 @@ namespace Nexcal.Engine
 		public const long MaxSafeInteger = 9007199254740991;
 		public const long MinSafeInteger = -9007199254740991;
 
+		public Number() : base(Position.Unknown)
+		{
+		}
+
 		public Number(Position position) : base(position)
 		{
 		}
@@ -29,6 +33,24 @@ namespace Nexcal.Engine
 
 		public double Value { get; set; } = 0;
 
+		public Number Add(Number operand)
+		{
+			if (Unit == null && operand.Unit != null)
+				return operand.Add(this);
+
+			var result = Clone();
+
+			if (operand.Unit == null)
+				result.Value += operand.Value;
+			else
+			{
+				// We copy the value to 'result' to keep the number base intact
+				result.CopyValue(Unit.Add(Value, operand));
+			}
+
+			return result;
+		}
+
 		internal Number Clone()
 		{
 			var clone = (Number)MemberwiseClone();
@@ -39,11 +61,26 @@ namespace Nexcal.Engine
 			return clone;
 		}
 
+		private void CopyValue(Number number)
+		{
+			Value = number.Value;
+			Unit = number.Unit;
+		}
+
 		internal override Number Evaluate(Calculator calc)
 		{
 			calc.DebugEvaluate(this);
 			
 			return this;
+		}
+
+		public Number Negate()
+		{
+			var result = Clone();
+
+			result.Value = -Value;
+
+			return result;
 		}
 
 		public static Number Parse(Parser p)

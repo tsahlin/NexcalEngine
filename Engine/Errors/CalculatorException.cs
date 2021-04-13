@@ -19,6 +19,7 @@ namespace Nexcal.Engine.Errors
 	public enum CalculatorError
 	{
 		Unknown = 0,            // Default
+		CannotAddUnits,
 		EvaluationResidue,
 		LeftNumberRequired,
 		NonNumberResult,
