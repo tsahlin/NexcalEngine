@@ -27,18 +27,30 @@ namespace Nexcal.Engine
 
 		public NumberBase Base { get; set; } = NumberBase.Dec;
 
+		public Number Clone => (Number)CloneToken();
+
 		public override Precedence Precedence => Precedence.Number;
 
 		public Unit Unit { get; set; }
 
 		public double Value { get; set; } = 0;
 
+		public string ValueString
+		{
+			get
+			{
+				return Value.ToString("R", CultureInfo.InvariantCulture);
+			}
+		}
+
 		public Number Add(Number operand)
 		{
+			// TODO: if (operand.Unit is Percent) - need special handling
+
 			if (Unit == null && operand.Unit != null)
 				return operand.Add(this);
 
-			var result = Clone();
+			var result = Clone;
 
 			if (operand.Unit == null)
 				result.Value += operand.Value;
@@ -49,16 +61,6 @@ namespace Nexcal.Engine
 			}
 
 			return result;
-		}
-
-		internal Number Clone()
-		{
-			var clone = (Number)MemberwiseClone();
-
-			clone.LeftToken = null;
-			clone.RightToken = null;
-
-			return clone;
 		}
 
 		private void CopyValue(Number number)
@@ -76,7 +78,7 @@ namespace Nexcal.Engine
 
 		public Number Negate()
 		{
-			var result = Clone();
+			var result = Clone;
 
 			result.Value = -Value;
 
@@ -177,7 +179,7 @@ namespace Nexcal.Engine
 			if (Unit != null)
 				return Unit.Format(this);
 
-			return Value.ToString("R", CultureInfo.InvariantCulture);
+			return ValueString;
 		}
 	}
 

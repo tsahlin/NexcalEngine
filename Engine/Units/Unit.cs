@@ -21,6 +21,8 @@ namespace Nexcal.Engine.Units
 
 		public virtual double Factor => 1;
 
+		protected virtual string FormatString => "{0} {1}";		// 0 = number, 1 = unit
+
 		public override Precedence Precedence => Precedence.Unit;
 
 		internal virtual Number Add(double value, Number operand)
@@ -58,7 +60,10 @@ namespace Nexcal.Engine.Units
 			return number;
 		}
 
-		public abstract string Format(Number number);
+		public virtual string Format(Number number)
+		{
+			return string.Format(FormatString, number.ValueString, this);
+		}
 
 		public virtual Number FromBase(double value)
 		{

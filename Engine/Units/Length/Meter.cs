@@ -11,11 +11,6 @@ namespace Nexcal.Engine.Units.Length
 		{
 		}
 
-		public override string Format(Number number)
-		{
-			throw new NotImplementedException();
-		}
-
 		public override string ToString()
 		{
 			return "m";

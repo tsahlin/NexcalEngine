@@ -26,7 +26,17 @@ namespace Nexcal.Engine
 
 		public Token RightToken { get; internal set; }
 
-		protected void DisposeTokens(List<Token> tokens)
+		internal Token CloneToken()
+		{
+			var clone = (Token)MemberwiseClone();
+
+			clone.LeftToken = null;
+			clone.RightToken = null;
+
+			return clone;
+		}
+
+		protected static void DisposeTokens(List<Token> tokens)
 		{
 			foreach (var t in tokens)
 			{

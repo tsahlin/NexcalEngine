@@ -15,7 +15,7 @@ namespace Nexcal.Engine.Operators
 
 		public static Number Calc(Calculator calc, Number left, Number right)
 		{
-			var result = left.Clone();
+			var result = left.Clone;
 
 			result.Value += right.Value;
 
