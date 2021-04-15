@@ -11,9 +11,11 @@ namespace Nexcal.Engine.Tests
 		{
             var calc	= new Calculator();
             var expr    = calc.Parse(input);
-			var number	= calc.Calculate(expr);
 
-            Assert.Equal(parsed, expr.ToString());
+			Assert.Equal(parsed, expr.ToString());
+
+			var number = calc.Calculate(expr);
+
             Assert.Equal(result, number.ToString());
 			Assert.Empty(calc.Warnings);
 		}

@@ -28,10 +28,10 @@ namespace Nexcal.Engine
 
 					return sb.ToString();
 				}
-				else if (Anchor.LeftToken == null)
+				else if (Anchor.RightToken == null)
 				{
-					sb.Append($"<null> <--- {Anchor.Name} ---> ");
-					sb.Append(Anchor.RightToken == null ? "<null>" : Anchor.Name);
+					sb.Append(Anchor.LeftToken == null ? "<null>" : Anchor.Name);
+					sb.Append($" <--- {Anchor.Name} ---> <null>");
 
 					return sb.ToString();
 				}
@@ -39,7 +39,7 @@ namespace Nexcal.Engine
 				sb.AppendLine($"| <--- {Anchor.Name}");
 				sb.AppendLine("|");
 
-				Token token		= Anchor.LeftToken;
+				Token token		= Anchor.RightToken;
 				Token lastToken = Anchor;
 
 				while (token != Anchor)
@@ -62,11 +62,11 @@ namespace Nexcal.Engine
 			}
 		}
 
-		public Token FirstToken => Anchor?.LeftToken;
+		public Token FirstToken => Anchor?.RightToken;
 
 		public bool IsEmpty => Anchor == null;
 
-		public Token LastToken => Anchor?.RightToken;
+		public Token LastToken => Anchor?.LeftToken;
 
 		public override Precedence Precedence => Precedence.Primary;
 
@@ -100,7 +100,7 @@ namespace Nexcal.Engine
 				Anchor = new Anchor(Position);
 
 				token.LeftToken		= Anchor;
-				Anchor.LeftToken	= token;
+				Anchor.RightToken	= token;
 			}
 			else
 			{
@@ -109,7 +109,7 @@ namespace Nexcal.Engine
 			}
 
 			token.RightToken	= Anchor;
-			Anchor.RightToken	= token;
+			Anchor.LeftToken	= token;
 		}
 
 		public void Clear()
@@ -186,7 +186,7 @@ namespace Nexcal.Engine
 				FirstToken.LeftToken	= token;
 
 				token.LeftToken			= Anchor;
-				Anchor.LeftToken		= token;
+				Anchor.RightToken		= token;
 			}
 		}
 

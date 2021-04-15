@@ -45,10 +45,10 @@ namespace Nexcal.Engine
 
 		public void SetRange(Position start, Position end)
 		{
-			Index = start.Index;
+			Length = end.Index + end.Length - start.Index;
+			Index  = start.Index;
 			Column = start.Column;
-			Line = start.Line;
-			Length = end.Index + end.Length - Index;
+			Line   = start.Line;
 		}
 
 		public void SetStop(Position end)

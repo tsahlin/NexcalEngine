@@ -17,7 +17,6 @@ namespace Nexcal.Engine.Operators
 			var right	= RequireRightNumber(calc);
 			var result	= Evaluate(calc, left, right);
 
-			result.Position.Length = right.Position.Index + right.Position.Length - left.Position.Index;
 			result.Replace(left, right);
 
 			return result;

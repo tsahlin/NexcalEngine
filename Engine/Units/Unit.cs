@@ -36,6 +36,18 @@ namespace Nexcal.Engine.Units
 			return FromBase(left.Value + right.Value);
 		}
 
+		protected Number ApplyToNumber(Number number)
+		{
+			if (number.Unit != null)
+				throw new CalculatorException(this, CalculatorError.UnitAlreadyAssigned);
+
+			number.Unit = this;
+
+			number.Replace(number, this);
+
+			return number;
+		}
+
 		public bool CanAdd(Unit unit)
 		{
 			return GetSumUnit(unit) != null;
@@ -48,16 +60,7 @@ namespace Nexcal.Engine.Units
 
 		internal override Number Evaluate(Calculator calc)
 		{
-			var number = LeftToken.Evaluate(calc);
-
-			if (number.Unit != null)
-				throw new CalculatorException(this, CalculatorError.UnitAlreadyAssigned);
-
-			number.Unit = this;
-
-			number.Replace(number, this);
-
-			return number;
+			return ApplyToNumber(LeftToken.Evaluate(calc));
 		}
 
 		public virtual string Format(Number number)
@@ -91,6 +94,13 @@ namespace Nexcal.Engine.Units
 
 		internal override Token PreProcess(Parser parser)
 		{
+			// When the left token is a simple number, we apply the unit during pre-processing
+			// to enable better string formatting. If the left token is an expression, the unit
+			// is applied during evaluation instead.
+
+			if (LeftToken is Number n)
+				return ApplyToNumber(n);
+
 			VerifyLeftNumber();
 
 			return this;
