@@ -19,6 +19,7 @@ namespace Nexcal.Engine.Units
 
 		public virtual Type BaseUnit => null;
 
+		/// <summary>1 of this equals Factor of BaseUnit</summary>
 		public virtual double Factor => 1;
 
 		protected virtual string FormatString => "{0} {1}";		// 0 = number, 1 = unit
@@ -90,6 +91,7 @@ namespace Nexcal.Engine.Units
 		internal static void InitIdentifierMap(Dictionary<string, Type> map)
 		{
 			map["m"]	= typeof(Length.Meter);
+			map["km"]	= typeof(Length.KiloMeter);
 		}
 
 		internal override Token PreProcess(Parser parser)
@@ -114,7 +116,7 @@ namespace Nexcal.Engine.Units
 			return new Number()
 			{
 				Value = value * Factor,
-				Unit = (Unit)Activator.CreateInstance(BaseUnit)
+				Unit = (Unit)Activator.CreateInstance(BaseUnit, new object[] { Position })
 			};
 		}
 	}
