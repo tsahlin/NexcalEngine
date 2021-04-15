@@ -26,15 +26,12 @@ namespace Nexcal.Engine.Units
 
 		public override Precedence Precedence => Precedence.Unit;
 
-		internal virtual Number Add(double value, Number operand)
+		internal virtual double Add(double value, Number operand)
 		{
 			if (!CanAdd(operand.Unit))
-				throw new UnitAddException(this, operand.Unit);
+				throw new UnitException(this, operand.Unit, CalculatorError.CannotAddUnits);
 
-			var left = ToBase(value);
-			var right = operand.Unit.ToBase(operand.Value);
-
-			return FromBase(left.Value + right.Value);
+			return FromBase(ToBase(value) + operand.Unit.ToBase(operand.Value));
 		}
 
 		protected Number ApplyToNumber(Number number)
@@ -69,13 +66,9 @@ namespace Nexcal.Engine.Units
 			return string.Format(FormatString, number.ValueString, this);
 		}
 
-		public virtual Number FromBase(double value)
+		public virtual double FromBase(double value)
 		{
-			return new Number()
-			{
-				Value = GetType() == BaseUnit ? value : value / Factor,
-				Unit = this
-			};
+			return GetType() == BaseUnit ? value : value / Factor;
 		}
 
 		public virtual Type GetProductUnit(Unit unit)
@@ -102,22 +95,15 @@ namespace Nexcal.Engine.Units
 
 			if (LeftToken is Number n)
 				return ApplyToNumber(n);
-
+				
 			VerifyLeftNumber();
 
 			return this;
 		}
 
-		public virtual Number ToBase(double value)
+		public virtual double ToBase(double value)
 		{
-			if (GetType() == BaseUnit)
-				return new Number() { Value = value, Unit = this };
-
-			return new Number()
-			{
-				Value = value * Factor,
-				Unit = (Unit)Activator.CreateInstance(BaseUnit, new object[] { Position })
-			};
+			return GetType() == BaseUnit ? value : value * Factor;
 		}
 	}
 }

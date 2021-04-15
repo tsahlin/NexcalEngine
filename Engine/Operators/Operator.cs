@@ -19,6 +19,7 @@ namespace Nexcal.Engine.Operators
 
 		internal static void InitIdentifierMap(Dictionary<string, Type> map)
 		{
+			map["as"]	= typeof(As);
 			map["mod"]	= typeof(Modulo);
 		}
 

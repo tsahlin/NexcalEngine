@@ -109,6 +109,12 @@ namespace Nexcal.Engine
 			throw new CalculatorException(this, CalculatorError.LeftNumberRequired);
 		}
 
+		protected void VerifyRight<T>(CalculatorError error)
+		{
+			if (!(RightToken is T))
+                throw new CalculatorException(this, error);
+		}
+
 		protected void VerifyRightNumber()
 		{
 			if (RightToken is Number || RightToken is Expression)

@@ -5,9 +5,9 @@ using Nexcal.Engine.Units;
 
 namespace Nexcal.Engine.Errors
 {
-	public class UnitAddException : CalculatorException
+	public class UnitException : CalculatorException
 	{
-		public UnitAddException(Unit left, Unit right) : base(left, CalculatorError.CannotAddUnits)
+		public UnitException(Unit left, Unit right, CalculatorError error) : base(left, error)
 		{
             LeftUnit    = left;
             RightUnit   = right;

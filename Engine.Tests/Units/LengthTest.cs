@@ -17,5 +17,13 @@ namespace Nexcal.Engine.Tests.Units
 		{
             ParseAndCalculcate(input, parsed, result);
 		}
+
+		[Theory]
+        [InlineData("2km as m", "2 km as m", "2000 m")]
+		[InlineData("500 as m as km", "500 as m as km", "0.5 km")]
+		public void Conversion(string input, string parsed, string result)
+		{
+            ParseAndCalculcate(input, parsed, result);
+		}
 	}
 }

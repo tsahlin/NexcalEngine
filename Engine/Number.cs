@@ -55,18 +55,24 @@ namespace Nexcal.Engine
 			if (operand.Unit == null)
 				result.Value += operand.Value;
 			else
-			{
-				// We copy the value to 'result' to keep the number base intact
-				result.CopyValue(Unit.Add(Value, operand));
-			}
+				result.Value = Unit.Add(Value, operand);
 
 			return result;
 		}
 
-		private void CopyValue(Number number)
+		public Number ConvertTo(Unit unit)
 		{
-			Value = number.Value;
-			Unit = number.Unit;
+			if (Unit != null)
+			{
+				if (Unit.BaseUnit != unit.BaseUnit)
+					throw new UnitException(Unit, unit, CalculatorError.CannotConvertUnits);
+
+				Value = unit.FromBase(Unit.ToBase(Value));
+            }
+
+			Unit = unit;
+
+			return this;
 		}
 
 		internal override Number Evaluate(Calculator calc)

@@ -20,10 +20,12 @@ namespace Nexcal.Engine.Errors
 	{
 		Unknown = 0,            // Default
 		CannotAddUnits,
+		CannotConvertUnits,
 		EvaluationResidue,
 		LeftNumberRequired,
 		NonNumberResult,
 		RightNumberRequired,
+		RightUnitRequired,
 		UnitAlreadyAssigned
 	}
 }
