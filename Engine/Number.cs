@@ -60,6 +60,18 @@ namespace Nexcal.Engine
 			return result;
 		}
 
+		public bool CheckResultRange(Calculator calc, Position pos)
+		{
+			if (Value > MaxSafeInteger || Value < MinSafeInteger)
+			{
+				calc.Warning(pos, WarningCode.ResultOutOfSafeRange);
+
+				return false;
+			}
+
+			return true;
+		}
+
 		public Number ConvertTo(Unit unit)
 		{
 			if (Unit != null)

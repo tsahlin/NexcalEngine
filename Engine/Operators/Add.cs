@@ -15,7 +15,7 @@ namespace Nexcal.Engine.Operators
 		{
 			var result = left.Add(right);
 
-			// TODO: Check for overflow and issue warning
+			result.CheckResultRange(calc, Position);
 
 			return result;
 		}
