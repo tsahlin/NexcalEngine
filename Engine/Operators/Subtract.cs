@@ -1,8 +1,6 @@
 ﻿// Nexcal math engine library
 // MIT License - https://github.com/tsahlin/NexcalEngine
 
-using System;
-
 namespace Nexcal.Engine.Operators
 {
 	public class Subtract : BinaryOperator
@@ -15,8 +13,11 @@ namespace Nexcal.Engine.Operators
 
 		protected override Number Evaluate(Calculator calc, Number left, Number right)
 		{
-			// TODO: Invert sign of right and then use operator add
-			throw new NotImplementedException();
+			var result = left.Add(right.Negate());
+
+			result.CheckResultRange(calc, Position);
+
+			return result;
 		}
 
 		public override string ToString()

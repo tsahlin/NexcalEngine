@@ -35,6 +35,20 @@ namespace Nexcal.Engine.Tests
 			}
 		}
 
+		[Fact]
+		public void Format()
+		{
+			var a = new Number();
+			a.SetValue(NumberBase.Dec, "1");
+
+			var b = new Number();
+			b.SetValue(NumberBase.Dec, "0.995");
+
+			var r = a.Add(b.Negate());
+
+			Assert.Equal("0.005", r.ToString());
+		}
+
 		[Theory]
 		[InlineData("0b0", 0)]
 		[InlineData("0b11", 3)]

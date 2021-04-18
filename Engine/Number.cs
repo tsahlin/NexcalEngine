@@ -29,6 +29,8 @@ namespace Nexcal.Engine
 
 		public Number Clone => (Number)CloneToken();
 
+		public bool IsInteger => Math.Floor(Value) == Math.Ceiling(Value);
+
 		public override Precedence Precedence => Precedence.Number;
 
 		public Unit Unit { get; set; }
@@ -39,7 +41,7 @@ namespace Nexcal.Engine
 		{
 			get
 			{
-				return Value.ToString("R", CultureInfo.InvariantCulture);
+				return Value.ToString(IsInteger ? "G17" : "G15", CultureInfo.InvariantCulture);
 			}
 		}
 

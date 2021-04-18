@@ -6,11 +6,11 @@ using Xunit;
 
 namespace Nexcal.Engine.Tests.Operators
 {
-	public class AddTest : TestBase
+	public class SubtractTest : TestBase
 	{
 		[Theory]
-        [InlineData("0+0", "0 + 0", "0")]
-		[InlineData(".005  +  .995", "0.005 + 0.995", "1")]
+        [InlineData("0-0", "0 - 0", "0")]
+		[InlineData("1  -  .995", "1 - 0.995", "0.005")]
 		public void Evaluate(string input, string parsed, string result)
 		{
             ParseAndCalculcate(input, parsed, result);
@@ -19,13 +19,14 @@ namespace Nexcal.Engine.Tests.Operators
 		[Fact]
 		public void Overflow()
 		{
-			var warnings = CalculateWithWarnings($"{Number.MaxSafeInteger}+0",
-				$"{Number.MaxSafeInteger} + 0", $"{Number.MaxSafeInteger}");
+            // TODO: Requires unary minus support
+			var warnings = CalculateWithWarnings($"{Number.MinSafeInteger}-0",
+				$"{Number.MinSafeInteger} - 0", $"{Number.MinSafeInteger}");
 
 			Assert.Empty(warnings);
 
-			warnings = CalculateWithWarnings($"{Number.MaxSafeInteger}+1",
-				$"{Number.MaxSafeInteger} + 1", $"{Number.MaxSafeInteger + 1}");
+			warnings = CalculateWithWarnings($"{Number.MinSafeInteger}-1",
+				$"{Number.MinSafeInteger} - 1", $"{Number.MinSafeInteger - 1}");
 
 			Assert.NotEmpty(warnings);
 			Assert.Equal(WarningCode.ResultOutOfSafeRange, warnings[0].Code);
