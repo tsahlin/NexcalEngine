@@ -11,6 +11,7 @@ namespace Nexcal.Engine.Tests.Operators
 		[Theory]
         [InlineData("0-0", "0 - 0", "0")]
 		[InlineData("1  -  .995", "1 - 0.995", "0.005")]
+        [InlineData("-1--1", "-1 - -1", "0")]
 		public void Evaluate(string input, string parsed, string result)
 		{
             ParseAndCalculcate(input, parsed, result);
@@ -19,7 +20,6 @@ namespace Nexcal.Engine.Tests.Operators
 		[Fact]
 		public void Overflow()
 		{
-            // TODO: Requires unary minus support
 			var warnings = CalculateWithWarnings($"{Number.MinSafeInteger}-0",
 				$"{Number.MinSafeInteger} - 0", $"{Number.MinSafeInteger}");
 
@@ -30,7 +30,7 @@ namespace Nexcal.Engine.Tests.Operators
 
 			Assert.NotEmpty(warnings);
 			Assert.Equal(WarningCode.ResultOutOfSafeRange, warnings[0].Code);
-			Assert.Equal(16, warnings[0].Position.Index);
+			Assert.Equal(17, warnings[0].Position.Index);
 			Assert.Equal(1, warnings[0].Position.Length);
 		}
 	}

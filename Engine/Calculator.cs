@@ -9,6 +9,11 @@ namespace Nexcal.Engine
 {
 	public class Calculator
 	{
+		static Calculator()
+		{
+			Parser.Init();
+		}
+
 		public Calculator()
 		{
 		}
@@ -42,9 +47,7 @@ namespace Nexcal.Engine
 
 		public Expression Parse(string expression)
 		{
-			var parser = new Parser(this);
-
-			return parser.Parse(expression);
+			return Parser.Parse(this, expression);
 		}
 
 		internal void Warning(Position position, WarningCode warning)

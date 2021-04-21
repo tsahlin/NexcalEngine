@@ -20,6 +20,21 @@ namespace Nexcal.Engine.Operators
 			return result;
 		}
 
+		internal override Token PreProcess(Parser parser)
+		{
+			if (LeftToken is Anchor || LeftToken is BinaryOperator)
+			{
+				// Convert this binary subtract to a unary minus
+				var minus = new UnaryMinus(Position);
+
+				minus.Replace(this);
+
+				return minus;
+			}
+
+			return this;
+		}
+
 		public override string ToString()
 		{
 			return " - ";

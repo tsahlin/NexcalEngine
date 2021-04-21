@@ -13,11 +13,11 @@ namespace Nexcal.Engine
 {
 	public class Parser
 	{
-		private static Dictionary<string, Type> identifierMap;
-
-		internal Parser(Calculator calc)
+		private Parser(Calculator calc, string expression)
 		{
-			Calculator = calc;
+			Calculator			= calc;
+			ExpressionString	= expression;
+			Position			= new Position();
 		}
 
 		private Calculator Calculator { get; }
@@ -28,33 +28,26 @@ namespace Nexcal.Engine
 
 		internal string ExpressionString { get; private set; }
 
-		private static Dictionary<string, Type> IdentifierMap
-		{
-			get
-			{
-				if (identifierMap == null)
-				{
-					identifierMap = new Dictionary<string, Type>();
-
-					FunctionCall.InitIdentifierMap(identifierMap);
-					Operator.InitIdentifierMap(identifierMap);
-					Unit.InitIdentifierMap(identifierMap);
-				}
-
-				return identifierMap;
-			}
-		}
+		private static Dictionary<string, Type> IdentifierMap { get; set; }
 
 		internal char NextChar => CharsLeft >= 2 ? ExpressionString[Position + 1] : '\0';
 
 		internal Position Position { get; private set; }
 
-		public Expression Parse(string expression)
+		internal static void Init()
 		{
-			ExpressionString	= expression;
-			Position			= new Position();
+			IdentifierMap = new Dictionary<string, Type>();
 
-			return ParseExpression();
+			FunctionCall.InitIdentifierMap(IdentifierMap);
+			Operator.InitIdentifierMap(IdentifierMap);
+			Unit.InitIdentifierMap(IdentifierMap);
+		}
+
+		internal static Expression Parse(Calculator calc, string expression)
+		{
+			var p = new Parser(calc, expression);
+
+			return p.ParseExpression();
 		}
 
 		internal Expression ParseExpression(string stop = "", Expression expression = null)
@@ -77,7 +70,7 @@ namespace Nexcal.Engine
 
 				if (char.IsDigit(chr) || chr == '.')
 					token = Number.Parse(this);
-				else if (Operator.Chars.Contains(chr))
+				else if (Operator.Chars.ContainsKey(chr))
 					token = Operator.Parse(this);
 				else if (char.IsLetter(chr))
 					token = ParseIdentifier();
@@ -85,7 +78,9 @@ namespace Nexcal.Engine
 					token = RoundBracketExpression.Parse(this);
 				else
 				{
-					// TODO: Unsupported char
+					// TODO: Handle unsupported char
+					System.Console.WriteLine((int)chr);
+					throw new Exception($"Unsupported char: {chr}");
 				}
 
 				expression.Add(token, this);

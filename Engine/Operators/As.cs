@@ -6,13 +6,11 @@ using Nexcal.Engine.Units;
 
 namespace Nexcal.Engine.Operators
 {
-	public class As : Operator
+	public class As : UnaryOperator
 	{
 		public As(Position position) : base(position)
 		{
 		}
-
-		public override Precedence Precedence => Precedence.Additive;
 
         internal Unit Unit { get; set; }
 
