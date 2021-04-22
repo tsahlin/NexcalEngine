@@ -83,6 +83,12 @@ namespace Nexcal.Engine.Units
 
 		internal static void InitIdentifierMap(Dictionary<string, Type> map)
 		{
+			map["gon"]	= typeof(Angle.Gradian);
+			map["°"]	= typeof(Angle.Degree);
+			map["deg"]	= typeof(Angle.Degree);
+			map["rad"]	= typeof(Angle.Radian);
+
+			map["cm"]	= typeof(Length.CentiMeter);
 			map["m"]	= typeof(Length.Meter);
 			map["km"]	= typeof(Length.KiloMeter);
 		}

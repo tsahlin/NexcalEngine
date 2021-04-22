@@ -23,6 +23,9 @@ namespace Nexcal.Engine
 		/// <summary>x << y, x >> y</summary>
 		Shift,
 
+		/// <summary>x as y</summary>
+		Conversion,
+
 		/// <summary>x < y, x > y, x <= y, x >= y</summary>
 		Relational,
 

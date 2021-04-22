@@ -19,7 +19,10 @@ namespace Nexcal.Engine.Tests.Units
 		}
 
 		[Theory]
-        [InlineData("2km as m", "2 km as m", "2000 m")]
+		[InlineData("1m as cm", "1 m as cm", "100 cm")]
+		[InlineData("1000m as km", "1000 m as km", "1 km")]
+		[InlineData("100cm as m", "100 cm as m", "1 m")]
+        [InlineData("1km as m", "1 km as m", "1000 m")]
 		[InlineData("500 as m as km", "500 as m as km", "0.5 km")]
 		public void Conversion(string input, string parsed, string result)
 		{

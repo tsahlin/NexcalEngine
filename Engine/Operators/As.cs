@@ -12,6 +12,8 @@ namespace Nexcal.Engine.Operators
 		{
 		}
 
+		public override Precedence Precedence => Precedence.Conversion;
+
         internal Unit Unit { get; set; }
 
         internal override Number Evaluate(Calculator calc)

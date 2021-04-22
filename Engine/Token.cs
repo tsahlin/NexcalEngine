@@ -103,7 +103,7 @@ namespace Nexcal.Engine
 
 		protected void VerifyLeftNumber()
 		{
-			if (LeftToken is Number || LeftToken is Expression)
+			if (LeftToken is Number || LeftToken is Expression || LeftToken is Operators.As)
 				return;
 
 			throw new CalculatorException(this, CalculatorError.LeftNumberRequired);
